@@ -6,7 +6,7 @@
 
 import dash
 from dash import dcc
-from dash import html
+from dash import html, ctx  
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objs as go
@@ -19,7 +19,7 @@ data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain
 app = dash.Dash(__name__)
 
 # Set the title of the dashboard
-#app.title = "Automobile Statistics Dashboard"
+app.title = "Automobile Statistics Dashboard"
 
 #---------------------------------------------------------------------------------
 # Create the dropdown menu options
@@ -33,7 +33,7 @@ year_list = [i for i in range(1980, 2024, 1)]
 # Create the layout of the app
 app.layout = html.Div([
     #TASK 2.1 Add title to the dashboard
-    html.H1("Automobile Sales Statistics Dashboard",
+    html.H1("Automobile Sales Statistics Dashboard"),
     html.P("Select a 'statistical report type' and 'Year' to create graphs", style={'textAlign': 'center', 'color': '#503D36', 'font-size': 18}),
     html.Div([#TASK 2.2: Add two dropdown menus
         html.Label("Select Statistics:"),
@@ -43,16 +43,19 @@ app.layout = html.Div([
             value='Select Statistics',
             placeholder='Select a report type',
             style={'width': '80%', 'padding': 3, 'textAlign': 'center', 'font-size': 20}
-    )
+        )
     ]),
     html.Div(dcc.Dropdown(
         id='select-year',
         options=[{'label': i, 'value': i} for i in year_list],
-        placeholder='Select Year'
+        value='Select-Year'
         )),
+
     html.Div([
     html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),
     ])
+])
+
 #TASK 2.4: Creating Callbacks
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
@@ -107,7 +110,7 @@ def update_output_container(selected_statistics, input_year):
 
 # Plot 4 bar chart for the effect of unemployment rate on vehicle type and sales
             
-        unemploy_sales=recession_data.groupby('Vehicle_Type')['unemployment_rate'].mean().reset_index()
+        unemp__data= recession_data.groupby(['Vehicle_Type','unemployment_rate'])['Automobile_Sales'].mean().reset_index()
         R_chart4 = dcc.Graph(figure=px.bar(unemployment_rate,
                         x='Vehicle_Type',
                         y='Automobile_Sales',
