@@ -42,24 +42,25 @@ app.layout = html.Div([
             options=dropdown_options,
             value='Select Statistics',
             placeholder='Select a report type',
-            style={'width': '80%', 'padding': 3, 'textAlign': 'center', 'font-size': 20}
-        )
+            style={'width': '80%', 'padding': 3, 'textAlign': 'center', 'font-size': 20})
+        
     ]),
     html.Div(dcc.Dropdown(
         id='select-year',
         options=[{'label': i, 'value': i} for i in year_list],
         value='Select-Year'
-        )),
+        style={'width': '80%', 'padding': 3, 'textAlign': 'center', 'font-size': 20})
+        ),
 
     html.Div([
     html.Div(id='output-container', className='chart-grid', style={'display':'flex'}),
     ])
-])
+
 
 #TASK 2.4: Creating Callbacks
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
-    Output(component_id='select-year', component_property='disabled'),
+    [Output(component_id='select-year', component_property='disabled')],
     Input(component_id='dropdown-statistics',component_property='value'))
 
 def update_input_container(selected_statistics):
