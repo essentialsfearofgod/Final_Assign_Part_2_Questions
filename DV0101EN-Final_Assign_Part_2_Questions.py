@@ -69,7 +69,7 @@ app.layout = html.Div([
 # Define the callback function to update the input container based on the selected statistics
 @app.callback(
     Output(component_id='select-year', component_property='disabled'),
-    Input(component_id='report-type-dropdown', component_property='value')
+    Input(component_id='dropdown-statistics', component_property='value')
 )
 def update_input_container(selected_statistics):
     if selected_statistics == 'Yearly Statistics':
@@ -125,8 +125,8 @@ def update_output_container(selected_statistics, input_year):
 
 # Plot 4 bar chart for the effect of unemployment rate on vehicle type and sales
         unemp__data= recession_data.groupby(['Vehicle_Type','unemployment_rate'])['Automobile_Sales'].mean().reset_index()
-        R_chart4 = dcc.Graph(figure=px.bar(unemployment_rate,
-                        x='Vehicle_Type',
+        R_chart4 = dcc.Graph(figure=px.bar(unemp__data,
+                        x='unemployment_rate',
                         y='Automobile_Sales',
                         color='Vehicle_Type',
                         labels={'unemployment_rate': 'Unemployment Rate', 'Automobile_Sales': 'Average Automobile Sales'},
@@ -197,4 +197,3 @@ def update_output_container(selected_statistics, input_year):
 # Run the Dash app
 if __name__ == '__main__':
     app.run_server(debug=True)
-
